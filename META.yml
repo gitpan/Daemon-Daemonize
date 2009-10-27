@@ -24,7 +24,8 @@ requires:
   IO::Socket::INET: 0
   POSIX: 0
   Path::Class: 0
+  Sub::Exporter: 0
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/robertkrimen/Daemon-Daemonize/tree/master
-version: 0.001
+version: 0.002
