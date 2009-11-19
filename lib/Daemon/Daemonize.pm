@@ -9,11 +9,11 @@ Daemon::Daemonize - An easy-to-use daemon(izing) toolkit
 
 =head1 VERSION
 
-Version 0.003
+Version 0.004
 
 =cut
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 
 =head1 SYNOPSIS
 
@@ -209,6 +209,7 @@ sub daemonize {
         }
 
         # Avoid 'stdin reopened for output' warning (taken from MooseX::Daemonize)
+        local *NULL;
         open( NULL, '/dev/null' );
         <NULL> if 0;
     }
