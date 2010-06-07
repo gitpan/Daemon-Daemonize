@@ -1,48 +1,57 @@
-use inc::Module::Install;
 
-die 'MSWin is unsupported' if $^O =~ /MSWin/i;
+use strict;
+use warnings;
 
-name     'Daemon-Daemonize';
-all_from 'lib/Daemon/Daemonize.pm';
-author   q{Robert Krimen <rkrimen@cpan.org>};
-license  'perl';
 
-resources repository => 'http://github.com/robertkrimen/Daemon-Daemonize/tree/master';
 
-{
-    require ExtUtils::MakeMaker;
-    use strict;
-    no strict 'refs';
+use ExtUtils::MakeMaker 6.31;
 
-    my $libscan = \&{"ExtUtils::MM_Any::libscan"};
-    *{"ExtUtils::MM_Any::libscan"} = sub {
-        return '' unless $libscan->(@_);
-        return '' if $_[1] =~ /\.sw[p-z]$/;
-        return $_[1];
-    };
+
+
+my %WriteMakefileArgs = (
+                       'test' => {
+                                   'TESTS' => 't/*.t'
+                                 },
+                       'NAME' => 'Daemon::Daemonize',
+                       'DISTNAME' => 'Daemon-Daemonize',
+                       'CONFIGURE_REQUIRES' => {
+                                                 'ExtUtils::MakeMaker' => '6.31'
+                                               },
+                       'AUTHOR' => 'Robert Krimen <robertkrimen@gmail.com>',
+                       'BUILD_REQUIRES' => {
+                                             'Test::Most' => '0'
+                                           },
+                       'ABSTRACT' => 'An easy-to-use daemon(izing) toolkit',
+                       'EXE_FILES' => [],
+                       'VERSION' => '0.0051',
+                       'PREREQ_PM' => {
+                                        'POSIX' => '0',
+                                        'IO::Socket::INET' => '0',
+                                        'Path::Class' => '0',
+                                        'Sub::Exporter' => '0',
+                                        'Carp' => '0'
+                                      },
+                       'LICENSE' => 'perl'
+                     );
+
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
+  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
+  my $pp = $WriteMakefileArgs{PREREQ_PM}; 
+  for my $mod ( keys %$br ) {
+    if ( exists $pp->{$mod} ) {
+      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod}; 
+    }
+    else {
+      $pp->{$mod} = $br->{$mod};
+    }
+  }
 }
 
-{
-    map { my ($pk, $vr) = split m/\s/; build_requires $pk => $vr || 0 } grep { ! /^\s*#/ } split m/\n/, <<_END_;
-Test::Most
-_END_
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
-    map { my ($pk, $vr) = split m/\s/; requires $pk => $vr || 0 } grep { ! /^\s*#/ } split m/\n/, <<_END_;
-Sub::Exporter
-Path::Class
-POSIX
-IO::Socket::INET
-Carp
-_END_
-}
-
-if (-e 'inc/.author') {
-    my $all_from = join '/', 'lib', split m/-/, name . '.pm';
-    `perldoc -tF $all_from > README` if ! -e 'README' || (stat $all_from)[9] > (stat 'README')[9];
-}
+WriteMakefile(%WriteMakefileArgs);
 
 
-auto_install;
-
-WriteAll;
 
