@@ -23,7 +23,7 @@ my %WriteMakefileArgs = (
                                            },
                        'ABSTRACT' => 'An easy-to-use daemon(izing) toolkit',
                        'EXE_FILES' => [],
-                       'VERSION' => '0.0051',
+                       'VERSION' => '0.0052',
                        'PREREQ_PM' => {
                                         'POSIX' => '0',
                                         'IO::Socket::INET' => '0',

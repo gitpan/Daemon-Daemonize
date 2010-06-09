@@ -1,6 +1,6 @@
 package Daemon::Daemonize;
 BEGIN {
-  $Daemon::Daemonize::VERSION = '0.0051';
+  $Daemon::Daemonize::VERSION = '0.0052';
 }
 # ABSTRACT: An easy-to-use daemon(izing) toolkit
 
@@ -112,11 +112,11 @@ sub daemonize {
     }
 
     if ( $stdout_file ) {
-        open STDOUT, ">", $stdout_file or confess "Could not redirect STDOUT to $stdout_file : $!";
+        open STDOUT, ">>", $stdout_file or confess "Could not redirect STDOUT to $stdout_file : $!";
     }
 
     if ( $stderr_file ) {
-        open STDERR, ">", $stderr_file or confess "Could not redirect STDERR to $stderr_file : $!";
+        open STDERR, ">>", $stderr_file or confess "Could not redirect STDERR to $stderr_file : $!";
     }
 
     return 1;
@@ -225,7 +225,7 @@ Daemon::Daemonize - An easy-to-use daemon(izing) toolkit
 
 =head1 VERSION
 
-version 0.0051
+version 0.0052
 
 =head1 SYNOPSIS
 
